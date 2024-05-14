@@ -1,4 +1,4 @@
-Title,Author,MyRating,AverageRating,NumberOfPages,DateRead,Year,id, Genre
+Title,Author,MyRating,AverageRating,NumberOfPages,DateRead,Year,id,Genre
 Atomic Habits,James Clear,0,4.36,319.0,2024/05/06,2024,1,Nonfiction
 Aesop’s Fables,Aesop,0,4.05,352.0,2015/11/01,2015,2,Fiction
 Cvijet sa raskršća,Antun Gustav Matoš,0,3.4,111.0,2015/11/01,2015,3,Fiction
@@ -137,7 +137,7 @@ Digital Fortress,Dan Brown,5,3.69,510.0,2024/02/15,2024,112,Mystery
 "One Piece, Volume 20", Eiichiro Oda,5,4.48,207.0, 2020/04/01,2020,136, Manga
 "One Piece, Volume 21",Eiichiro Oda,5,4.48,207.0,2020/04/01,2020,137, Manga
 "One Piece, Volume 22",Eiichiro Oda,5,4.48,207.0,2020/04/01,2020,138, Manga
-"One Piece, Volume 23", Eiichiro Oda,5,4.48,207.0, 2020/04/01,2020,139, Manga
+"One Piece, Volume 23", Eiichiro Oda,5,4.48,207.0,2020/04/01,2020,139, Manga
 "One Piece, Volume 24", Eiichiro Oda,5,4.48,207.0, 2020/04/01,2020,140, Manga
 "One Piece, Volume 25", Eiichiro Oda,5,4.48,207.0, 2020/04/01,2020,141, Manga
 "One Piece, Volume 26", Eiichiro Oda,5,4.48,207.0, 2020/04/01,2020,142, Manga
@@ -167,9 +167,9 @@ Digital Fortress,Dan Brown,5,3.69,510.0,2024/02/15,2024,112,Mystery
 "One Piece, Volume 50", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,166, Manga
 "One Piece, Volume 51", Eiichiro Oda,5,4.48,207.0,2020/06/01,2020,167, Manga
 "One Piece, Volume 52", Eiichiro Oda,5,4.48,207.0,2020/06/01,2020,168, Manga
-"One Piece, Volume 53", Eiichiro Oda,5,4.48,207.0, 2020/03/01,2020,169, Manga
-"One Piece, Volume 54", Eiichiro Oda,5,4.48,207.0, 2020/03/01,2020,170, Manga
-"One Piece, Volume 55", Eiichiro Oda,5,4.48,207.0, 2020/03/01,2020,171, Manga
+"One Piece, Volume 53", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,169, Manga
+"One Piece, Volume 54", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,170, Manga
+"One Piece, Volume 55", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,171, Manga
 "One Piece, Volume 56", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,172, Manga
 "One Piece, Volume 57", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,173, Manga
 "One Piece, Volume 58", Eiichiro Oda,5,4.48,207.0, 2020/06/01,2020,174, Manga
@@ -207,13 +207,13 @@ Digital Fortress,Dan Brown,5,3.69,510.0,2024/02/15,2024,112,Mystery
 "One Piece, Volume 90", Eiichiro Oda,5,4.48,207.0, 2020/09/01,2020,206, Manga
 "One Piece, Volume 91",Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,207, Manga
 "One Piece, Volume 92",Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,208, Manga
-"One Piece, Volume 93", Eiichiro Oda,5,4.48,207.0, 2020/10/01,2020,209, Manga
-"One Piece, Volume 94", Eiichiro Oda,5,4.48,207.0, 2020/10/01,2020,210, Manga
-"One Piece, Volume 95", Eiichiro Oda,5,4.48,207.0, 2020/10/01,2020,211, Manga
-"One Piece, Volume 96", Eiichiro Oda,5,4.48,207.0, 2020/10/01,2020,212, Manga
-"One Piece, Volume 97", Eiichiro Oda,5,4.48,207.0, 2020/11/01,2020,213, Manga
-"One Piece, Volume 98", Eiichiro Oda,5,4.48,207.0, 2021/02/01,2021,214, Manga
-"One Piece, Volume 99", Eiichiro Oda,5,4.48,207.0, 2021/06/01,2021,215, Manga
+"One Piece, Volume 93", Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,209, Manga
+"One Piece, Volume 94", Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,210, Manga
+"One Piece, Volume 95", Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,211, Manga
+"One Piece, Volume 96", Eiichiro Oda,5,4.48,207.0,2020/10/01,2020,212, Manga
+"One Piece, Volume 97", Eiichiro Oda,5,4.48,207.0,2020/11/01,2020,213, Manga
+"One Piece, Volume 98", Eiichiro Oda,5,4.48,207.0,2021/02/01,2021,214, Manga
+"One Piece, Volume 99", Eiichiro Oda,5,4.48,207.0,2021/06/01,2021,215, Manga
 "One Piece, Volume 100", Eiichiro Oda,5,4.48,207.0, 2021/09/01,2021,216, Manga
 "One Piece, Volume 101",Eiichiro Oda,5,4.48,207.0,2021/12/01,2021,217, Manga
 "One Piece, Volume 102",Eiichiro Oda,5,4.48,207.0,2022/04/01,2022,218, Manga
