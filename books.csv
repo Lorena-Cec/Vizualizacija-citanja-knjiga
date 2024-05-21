@@ -1,10 +1,10 @@
 Title,Author,MyRating,AverageRating,NumberOfPages,DateRead,Year,id,Genre
-Atomic Habits,James Clear,0,4.36,319.0,2024/05/06,2024,1,Nonfiction
+Atomic Habits,James Clear,0,4.36,319.0,2024/05/06,2024,1,Philosophy
 Aesop’s Fables,Aesop,0,4.05,352.0,2015/11/01,2015,2,Fiction
 Cvijet sa raskršća,Antun Gustav Matoš,0,3.4,111.0,2015/11/01,2015,3,Fiction
-Zlatarovo zlato,August Šenoa,0,3.33,294.0,2016/01/01,2016,4,Historical Fiction
+Zlatarovo zlato,August Šenoa,0,3.33,294.0,2016/01/01,2016,4,History
 The Divine Comedy,Dante Alighieri,0,4.08,798.0,2016/06/01,2016,5,Philosophy
-Dekameron,Giovanni Boccaccio,0,3.88,823.0,2016/03/01,2016,6,Historical Fiction
+Dekameron,Giovanni Boccaccio,0,3.88,823.0,2016/03/01,2016,6,History
 Père Goriot,Honoré de Balzac,0,3.85,384.0,2018/02/01,2018,7,Fiction
 Madame Bovary,Gustave Flaubert,0,3.7,329.0,2017/12/01,2017,8,Fiction
 A Doll's House,Henrik Ibsen,0,3.76,122.0,2017/11/01,2017,9,Play
@@ -14,9 +14,9 @@ Duga,Dinko Šimunović,0,3.65,197.0,2018/09/01,2018,12,Drama
 Gospoda Glembajevi,Miroslav Krleža,0,3.96,196.0,2019/04/01,2019,13,Drama
 The Metamorphosis,Franz Kafka,0,3.87,201.0,2019/01/01,2019,14,Philosophy
 Proces,Franz Kafka,0,3.96,185.0,2019/02/01,2019,15,Philosophy
-Crime and Punishment,Fyodor Dostoevsky,0,4.27,671.0,2018/03/01,2018,16,Crime
+Crime and Punishment,Fyodor Dostoevsky,0,4.27,671.0,2018/03/01,2018,16,Philosophy
 U registraturi,Ante Kovačić,0,3.61,417.0,2018/04/01,2018,17,Drama
-Smrt Smail-age Čengića,Ivan Mažuranić,0,2.88,65.0,2018/05/01,2018,18,Poetry
+Smrt Smail-age Čengića,Ivan Mažuranić,0,2.88,65.0,2018/05/01,2018,18,History
 Hamlet,William Shakespeare,0,4.02,289.0,2017/03/01,2017,19,Play
 Fedra,Jean Racine,0,3.69,103.0,2017/01/01,2017,20,Play
 Dundo Maroje,Marin Držić,0,3.05,140.0,2017/02/01,2017,21,Play
@@ -24,11 +24,11 @@ Dubravka,Ivan Gundulić,0,2.49,66.0,2016/12/01,2016,22,Drama
 Don Quijote de la Mancha I,J.R. Cuenot,0,3.89,141.0,2016/10/01,2016,23,Fiction
 The Old Man and the Sea,Ernest Hemingway,0,3.8,96.0,2015/05/01,2015,24,Fiction
 Alkar,Dinko Šimunović,0,2.86,111.0,2015/04/01,2015,25,Fiction
-The Diary of a Young Girl,Anne Frank,0,4.19,283.0,2014/11/01,2014,26,Biography
+The Diary of a Young Girl,Anne Frank,0,4.19,283.0,2014/11/01,2014,26,History
 Romeo and Juliet,William Shakespeare,0,3.74,281.0,2014/11/01,2014,27,Play
 The Little Prince,Antoine de Saint-Exupéry,0,4.32,96.0,2015/02/01,2015,28,Philosophy
-In Desert and Wilderness,Henryk Sienkiewicz,0,3.34,460.0,2014/06/01,2014,29,Adventure
-"The Breadwinner (The Breadwinner, #1)",Deborah Ellis,0,4.0,171.0,2014/03/01,2014,30,Historical Fiction
+In Desert and Wilderness,Henryk Sienkiewicz,0,3.34,460.0,2014/06/01,2014,29,Fiction
+"The Breadwinner (The Breadwinner, #1)",Deborah Ellis,0,4.0,171.0,2014/03/01,2014,30,History
 You Asked for Perfect,Laura  Silverman,4,3.8,267.0,2019/04/27,2019,31,Romance
 "Letters to the Lost (Letters to the Lost, #1)",Brigid Kemmerer,5,4.32,391.0,2018/10/09,2018,32,Romance
 "The Stand-In Boyfriend (Grove Valley High, #1)",Emma Doherty,4,3.98,253.0,2016/03/31,2016,33,Romance
@@ -74,15 +74,15 @@ Dear Aaron,Mariana Zapata,5,3.91,500.0,2019/09/15,2019,62,Romance
 "The City of Ember (Book of Ember, #1)",Jeanne DuPrau,5,3.89,270.0,2019/06/15,2019,73,Fantasy
 Remain Nameless,HeyJude19,5,4.4,1000.0,2024/01/29,2024,74,Fanfiction
 Manacled,SenLinYu,3,4.65,1458.0,2024/01/25,2024,75,Fanfiction
-"Heartstopper: Volume Two (Heartstopper, #2)",Alice Oseman,5,4.54,320.0,2024/03/03,2024,76,LGBT
-"Heartstopper: Volume One (Heartstopper, #1)",Alice Oseman,5,4.47,288.0,2024/03/03,2024,77,LGBT
-The Song of Achilles,Madeline Miller,5,4.33,352.0,2024/01/15,2024,78,Mythology
-"Antigone (The Theban Plays, #3)",Sophocles,3,3.67,80.0,2015/11/01,2015,79,Tragedy
+"Heartstopper: Volume Two (Heartstopper, #2)",Alice Oseman,5,4.54,320.0,2024/03/03,2024,76,Manga
+"Heartstopper: Volume One (Heartstopper, #1)",Alice Oseman,5,4.47,288.0,2024/03/03,2024,77,Manga
+The Song of Achilles,Madeline Miller,5,4.33,352.0,2024/01/15,2024,78,Romance
+"Antigone (The Theban Plays, #3)",Sophocles,3,3.67,80.0,2015/11/01,2015,79,History
 the gods lie.,Kaori Ozaki,5,4.03,214.0,2024/05/02,2024,80,Manga
 "A Court of Thorns and Roses (A Court of Thorns and Roses, #1)",Sarah J. Maas,4,4.2,419.0,2024/04/25,2024,81,Fantasy
 "A Court of Mist and Fury (A Court of Thorns and Roses, #2)",Sarah J. Maas,5,4.65,626.0,2024/05/02,2024,82,Fantasy
 Ten out of Ten,morriganmercy,5,4.08,230.0,2024/01/28,2024,83,Fanfiction
-Me and Earl and the Dying Girl,Jesse Andrews,5,3.51,295.0,2016/05/18,2016,84,Drama 
+Me and Earl and the Dying Girl,Jesse Andrews,5,3.51,295.0,2016/05/18,2016,84,Drama
 "Easy (Contours of the Heart, #1)",Tammara Webber,4,4.08,336.0,2018/02/21,2018,85,Romance
 My Life Next Door,Huntley Fitzpatrick,5,3.97,394.0,2016/08/16,2016,86,Romance
 Eleanor & Park,Rainbow Rowell,4,3.94,328.0,2018/08/15,2018,87,Romance
@@ -109,9 +109,9 @@ Before I Fall,Lauren Oliver,5,3.89,470.0,2017/04/18,2017,101,Drama
 "Demonglass (Hex Hall, #2)",Rachel Hawkins,5,4.08,359.0,2019/08/02,2019,108,Fantasy
 "Hex Hall (Hex Hall, #1)",Rachel Hawkins,5,3.93,323.0,2019/07/30,2019,109,Fantasy
 "Fourth Wing (The Empyrean, #1)",Rebecca Yarros,5,4.59,498.0,2024/03/06,2024,110,Fantasy
-11/22/63,Stephen King,5,4.33,849.0,2024/01/10,2024,111,Historical Fiction
-Digital Fortress,Dan Brown,5,3.69,510.0,2024/02/15,2024,112,Mystery
-"Simon vs. the Homo Sapiens Agenda (Simonverse, #1)",Becky Albertalli,5,4.16,320.0,2019/01/24,2019,113,LGBT
+11/22/63,Stephen King,5,4.33,849.0,2024/01/10,2024,111,History
+Digital Fortress,Dan Brown,5,3.69,510.0,2024/02/15,2024,112,Fantasy
+"Simon vs. the Homo Sapiens Agenda (Simonverse, #1)",Becky Albertalli,5,4.16,320.0,2019/01/24,2019,113,Romance
 "Iron Flame (The Empyrean, #2)",Rebecca Yarros,5,4.35,640.0,2024/03/11,2024,114,Fantasy
 "Pushing the Limits (Pushing the Limits, #1)",Katie McGarry,4,4.05,392.0,2019/04/24,2019,115,Romance
 "Elantris (Elantris, #1)",Brandon Sanderson,5,4.18,638.0,2024/03/25,2024,116,Fantasy

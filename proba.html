@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usporedba broja knjiga po mjesecima</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <div>
+        <button onclick="toggleYear(2014)" style="background-color: #ffffff;">2014</button>
+        <button onclick="toggleYear(2015)" style="background-color: #ffffff;">2015</button>
+        <!-- Dodajte ostale godine kao što su 2016, 2017, itd. -->
+    </div>
+    <canvas id="bookChart"></canvas>
+
+    <script>
+        // Simulirani podaci o broju knjiga po mjesecima za različite godine
+        const data = {
+            2014: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65],
+            2015: [8, 12, 18, 22, 28, 32, 38, 42, 48, 52, 58, 62]
+            // Dodajte ostale godine i njihove podatke o broju knjiga po mjesecima
+        };
+
+        let selectedYears = [];
+
+        function toggleYear(year) {
+            const index = selectedYears.indexOf(year);
+            if (index === -1) {
+                selectedYears.push(year);
+            } else {
+                selectedYears.splice(index, 1);
+            }
+
+            renderChart();
+        }
+
+        function renderChart() {
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const datasets = [];
+
+            selectedYears.forEach(year => {
+                const dataset = {
+                    label: year.toString(),
+                    data: data[year],
+                    borderColor: getRandomColor(),
+                    fill: false
+                };
+                datasets.push(dataset);
+            });
+
+            const ctx = document.getElementById('bookChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                }
+            });
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>

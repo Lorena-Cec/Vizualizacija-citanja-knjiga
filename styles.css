@@ -1,0 +1,258 @@
+body{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 0;
+}
+
+.header{
+    background-color: darkseagreen;
+    margin: 0;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+h1{
+    font-size: 3em;
+    margin: 0;
+}
+
+#container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  gap: 50px;
+}
+
+#box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 20px;
+  font-size: 43px;
+  margin-left: 55px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden;
+}
+
+#pie-chart{
+  align-items: center;
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+}
+
+.tooltip {
+  position: absolute;
+  visibility: hidden;
+  background: darkseagreen;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#donut-chart{
+  align-items: center;
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+}
+
+#books-div1{
+  padding: 0;
+  width: 1000px;
+  height: 350px;
+  margin: 0;
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+}
+
+#books-div{
+  padding: 0;
+  width: 800px;
+  height: 350px;
+  margin: 0;
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+#books-month, #books-year{
+  font-size: 1.4em;
+  font-weight: 600;
+  margin: 0;
+  padding-top: 20px;
+}
+
+#books-list-div{
+  padding-bottom: 30px;
+  width: auto;
+  height: 250px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  flex-direction: row;
+}
+
+#books-list{
+  list-style-type: decimal;
+  padding: 0;
+  width: 500px;
+  height: 230px;
+  overflow-y:auto;
+  margin: 0;
+  scrollbar-width: thin; /* Width of the scrollbar */
+  scrollbar-color: #888 #f1f1f1; /* thumb color and track color */
+}
+
+#books-list::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+#books-list::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+#books-list::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
+
+#books-list::-moz-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+#books-list::-moz-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
+
+#books-list li{
+  font-size: 20px;
+  padding: 4px;;
+  cursor: pointer;
+}
+
+#books-rating{
+  text-align: center;
+  padding-bottom: 40px;
+  width: 200px;
+}
+
+#books-rating img{
+  width: 100px;
+}
+
+#title{
+  font-size: 20px;
+}
+
+#author{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#charts{
+  margin-left: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-right: 100px;
+  gap: 50px;
+}
+
+#charts1{
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+#charts2{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+
+#total-pages-parent{
+  width: 350px;
+  height: 350px;
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+#total-pages{
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align:  center;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: #FAC55A ;
+}
+#total-pages-p{
+  padding-top: 60px;
+  margin-bottom: 7px;
+  font-weight: 600;
+  font-size: 1.4em;
+}
+
+#total-pages-span{
+  font-size: 60px;
+}
+
+#box a{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-decoration: none;
+    color: #00563F;
+    border-radius: 15%;
+    padding: 10px;
+}
+
+#chart {
+  background-color: rgb(250, 197, 90, 0.2);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.chart {
+  display: none;
+}
+
+.axis text {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: #8FBC8F;
+}
+
+.bar:hover {
+  fill: #00563F;
+}
