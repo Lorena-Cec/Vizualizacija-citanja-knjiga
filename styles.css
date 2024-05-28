@@ -66,7 +66,7 @@ h1{
 
 #books-div1{
   padding: 0;
-  width: 1000px;
+  width: 1100px;
   height: 350px;
   margin: 0;
   background-color: rgb(250, 197, 90, 0.2);
@@ -97,6 +97,7 @@ h1{
   padding-bottom: 30px;
   width: auto;
   height: 250px;
+
   margin: 0;
   display: flex;
   justify-content: space-between;
@@ -108,6 +109,8 @@ h1{
 #books-list{
   list-style-type: decimal;
   padding: 0;
+  border: 5px solid rgb(143, 188, 143, 0.5);
+  background-color: rgb(143, 188, 143, 0.4);;
   width: 500px;
   height: 230px;
   overflow-y:auto;
@@ -142,14 +145,32 @@ h1{
   cursor: pointer;
 }
 
+#books-list li:hover{
+  text-decoration: underline;
+}
+
+#books-list li:checked{
+  text-decoration: dashed;
+}
+
+
 #books-rating{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
   text-align: center;
-  padding-bottom: 40px;
+  padding:0;
   width: 200px;
 }
 
 #books-rating img{
-  width: 100px;
+  width: 130px;
+  margin:0 auto;
+}
+
+#cover{
+  border: 5px solid rgb(243, 116, 51, 0.5);
 }
 
 #title{
@@ -162,13 +183,12 @@ h1{
 }
 
 #charts{
-  margin-left: 45px;
+  margin-left: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-right: 100px;
   gap: 50px;
 }
 
@@ -186,7 +206,7 @@ h1{
 }
 
 #total-pages-parent{
-  width: 350px;
+  width: 400px;
   height: 350px;
   background-color: rgb(250, 197, 90, 0.2);
   border-radius: 5px;
@@ -255,4 +275,20 @@ h1{
 
 .bar:hover {
   fill: #00563F;
+}
+
+.bar.clicked {
+  fill: #00563F;
+}
+
+.line {
+  stroke-dasharray: 1700;
+  stroke-dashoffset: 2000;
+  animation: dash 2.5s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
 }

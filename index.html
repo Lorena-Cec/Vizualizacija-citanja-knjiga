@@ -23,25 +23,23 @@
           return d.Year == year;
         });
 
-        var months = d3.range(1, 13); // Generiranje svih mjeseci od 1 do 12
+        var months = d3.range(1, 13); 
 
         var booksReadPerMonth = months.map(function(month) {
           return {
             month: month,
             booksRead: filteredData.filter(function(d) {
-              return +d.DateRead.split("/")[1] === month; // Provjera ima li podataka za trenutni mjesec
+              return +d.DateRead.split("/")[1] === month; 
             }).length
           };
         });
 
-        // Dimenzije grafikona
-        var margin = { top: 50, right: 50, bottom: 60, left: 50 }, // Povećanje margin.bottom da bi se oznake na x-osi mogle prikazati
+        var margin = { top: 50, right: 50, bottom: 60, left: 50 }, 
             width = 1000 - margin.left - margin.right,
             height = 450 - margin.top - margin.bottom;
 
-        // X i Y skale
         var x = d3.scaleBand()
-            .domain(months.map(String)) // Konvertiranje mjeseci u stringove radi prikaza na x-osi
+            .domain(months.map(String)) 
             .range([0, width])
             .padding(0.1);
 
@@ -50,28 +48,21 @@
             .nice()
             .range([height, 0]);
 
-        // Kreiranje osi
         var xAxis = d3.axisBottom(x)
           .tickFormat(function(d) {
-            // Rotacija oznaka na x-osi
             var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            return monthNames[parseInt(d) - 1]; // Konvertiranje broja mjesta u indeks mjeseca u nizu
+            return monthNames[parseInt(d) - 1]; 
           });
 
         var yAxis = d3.axisLeft(y)
           .ticks(5);
 
-        // Uklanjanje prethodnog grafikona
-        d3.select("#chart").selectAll("*").remove();
-
-        // Kreiranje SVG elementa
         var svg = d3.select("#chart").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // Dodavanje X osi
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
@@ -82,35 +73,43 @@
             .attr("dy", ".15em")
             .attr("transform", "rotate(-65)");
 
-        // Dodavanje Y osi
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis);
 
         var barchart = svg.selectAll("rect")
-          .data(booksReadPerMonth)
-          .enter()
-          .append("rect")
-          .attr("x", function(d) { return x(String(d.month)); })
-          .attr("y", function(d) { return y(d.booksRead); })
-          .attr("height", function(d) { return height - y(d.booksRead); })
-          .attr("width", x.bandwidth())
-          .attr("class", function(d) { return "bar bar-" + String(d.month); })
-          .on("click", function(d) {
-            var clickedMonth = d3.select(this).attr("class").split(" ")[1].split("-")[1]; // Dohvaćamo redni broj mjeseca iz klase
-            showBooksByMonth(clickedMonth, year);
-          });
+            .data(booksReadPerMonth)
+            .enter()
+            .append("rect")
+            .attr("x", function(d) { return x(String(d.month)); })
+            .attr("y", height)  
+            .attr("height", 0)  
+            .attr("width", x.bandwidth())
+            .attr("class", function(d) { return "bar bar-" + String(d.month); })
+            .style("cursor", "pointer")
+            .on("click", function(event, d) {
+                svg.selectAll("rect").classed("clicked", false);
+                d3.select(this).classed("clicked", true);
+                var clickedMonth = d3.select(this).attr("class").split(" ")[1].split("-")[1]; 
+                showBooksByMonth(clickedMonth, year);
+            })
+            .transition()
+            .duration(800)
+            .delay(function(d, i) { return i * 100; })
+            .attr("y", function(d) { return y(d.booksRead); })
+            .attr("height", function(d) { return height - y(d.booksRead); });
+            
 
         var totalBooks = d3.sum(booksReadPerMonth, function(d) { return d.booksRead; });
 
         svg.append("text")
-        .attr("class", "total-books")
-        .attr("x", width / 2)
-        .attr("y", "-10px")
-        .attr("text-anchor", "middle")
-        .text("Total books read: " + totalBooks)
-        .attr("font-weight", "600")
-        .attr("font-size", "1.4em");
+            .attr("class", "total-books")
+            .attr("x", width / 2)
+            .attr("y", "-20px")
+            .attr("text-anchor", "middle")
+            .text("Total books read per month in " + year)
+            .attr("font-weight", "600")
+            .attr("font-size", "1.4em");
       });
     }
 
@@ -155,7 +154,7 @@
             return b.count - a.count;
         });
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#9D4410', '#76491C', '#4E4D27', '#275233', '#00563F'];
+        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
 
         var colorMap = {};
         genreData.forEach(function(d, i) {
@@ -189,8 +188,9 @@
         arcs.append("path")
             .attr("d", arc)
             .attr("fill", function(d) { return colorScale(d.data.genre); })
-            .transition() // Dodajemo tranziciju
-            .duration(2000) // Trajanje tranzicije u milisekundama
+            .style("cursor", "pointer")
+            .transition() 
+            .duration(2000) 
             .attrTween('d', function(d) {
                 var i = d3.interpolate(d.startAngle, d.endAngle);
                 return function(t) {
@@ -199,9 +199,7 @@
                 }
             })
             .on("end", function() {
-                // Provjeravamo je li već dodan polyline i tekst
                 if (!addedPolylineAndText) {
-                    // Ako nisu dodani, dodajemo ih
                     arcs.append("polyline")
                         .attr("points", function(d) {
                             var pos = outerArc.centroid(d);
@@ -210,9 +208,9 @@
                         })
                         .style("fill", "none")
                         .style("stroke", "black")
-                        .style("opacity", 0) // Postavljamo početnu vrijednost opacity na 0
-                        .transition() // Dodajemo tranziciju
-                        .duration(500) // Trajanje tranzicije u milisekundama
+                        .style("opacity", 0) 
+                        .transition() 
+                        .duration(500) 
                         .style("opacity", 1); 
 
                     arcs.append("text")
@@ -226,14 +224,18 @@
                             return midAngle(d) < Math.PI ? "start" : "end";
                         })
                         .text(function(d) { return (d.data.genre + ": " + ((d.data.count/totalBooks)*100).toFixed(1) + "%"); })
-                        .style("opacity", 0) // Postavljamo početnu vrijednost opacity na 0
-                        .transition() // Dodajemo tranziciju
-                        .duration(500) // Trajanje tranzicije u milisekundama
+                        .style("opacity", 0) 
+                        .transition() 
+                        .duration(500) 
                         .style("opacity", 1); 
-                    // Postavljamo varijablu na true kako bismo označili da su polyline i tekst dodani
                     addedPolylineAndText = true;
                 }
             });
+        
+        arcs.on("click", function(event, d) {
+            var clickedGenre = d.data.genre;
+            showBooksByGenre(clickedGenre, year);
+        });
 
         function midAngle(d) {
             return d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -242,7 +244,7 @@
         svg.append("text")
             .attr("class", "pie-chart")
             .attr("x", "0px")
-            .attr("y", "-185px")
+            .attr("y", "-195px")
             .attr("text-anchor", "middle")
             .text("Genres read:")
             .attr("font-weight", "600")
@@ -266,13 +268,13 @@
                     2014: 10,
                     2015: 20, 
                     2016: 30,
-                    2017: 30,
-                    2018: 30,
+                    2017: 20,
+                    2018: 20,
                     2019: 30,
-                    2020: 30,
-                    2021: 30,
-                    2022: 30,
-                    2023: 30,
+                    2020: 40,
+                    2021: 10,
+                    2022: 20,
+                    2023: 25,
                     2024: 30,
                 };
 
@@ -316,8 +318,8 @@
                 .append("path")
                 .attr("d", arc)
                 .attr("fill", function(d) { return colorDonut(d.data.label); })
-                .transition() // Dodajemo tranziciju
-                .duration(2000) // Trajanje tranzicije u milisekundama
+                .transition() 
+                .duration(2000) 
                 .attrTween('d', function(d) {
                     var i = d3.interpolate(d.startAngle,  d.endAngle);
                     return function(t) {
@@ -332,8 +334,8 @@
                 .append("path")
                 .attr("d", arc)
                 .attr("fill", function(d) { return colorDonut(d.data.label); })
-                .transition() // Dodajemo tranziciju
-                .duration(2000) // Trajanje tranzicije u milisekundama
+                .transition() 
+                .duration(2000) 
                 .attrTween('d', function(d) {
                     var i = d3.interpolate(d.startAngle+0.1, d.endAngle);
                     return function(t) {
@@ -351,7 +353,7 @@
                 .style("opacity", 0)
                 .transition() // Dodajemo tranziciju
                 .delay(2000) 
-                .duration(1500) // Trajanje tranzicije u milisekundama
+                .duration(500) // Trajanje tranzicije u milisekundama
                 .style("opacity", 1); 
 
             svg.append("text")
@@ -377,14 +379,13 @@ if (selectedYears.length === 0) return;
 
 d3.csv("books.csv").then(function(data) {
     var months = d3.range(1, 13);
-    var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#9D4410', '#76491C', '#4E4D27', '#275233', '#00563F'];
+    var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
 
 var colors = d3.scaleOrdinal()
     .domain(selectedYears)
     .range(customColors);
     var booksReadPerMonthByYear = [];
 
-    // Iteriranje kroz svaku odabrane godinu i kreiranje podataka za svaku od njih
     selectedYears.forEach(function(year) {
         var filteredData = data.filter(function(d) {
             return d.Year == year;
@@ -405,12 +406,10 @@ var colors = d3.scaleOrdinal()
         });
     });
 
-    // Dimenzije grafikona
     var margin = { top: 50, right: 50, bottom: 60, left: 50 },
         width = 1000 - margin.left - margin.right,
         height = 450 - margin.top - margin.bottom;
 
-    // X i Y skale
     var x = d3.scaleBand()
         .domain(months.map(String))
         .range([0, width])
@@ -435,56 +434,19 @@ var colors = d3.scaleOrdinal()
     var yAxis = d3.axisLeft(y)
         .ticks(5);
 
-    // Kreiranje linija za svaku godinu
     var line = d3.line()
         .x(function(d) { return x(String(d.month)) + x.bandwidth() / 2; })
         .y(function(d) { return y(d.booksRead); });
 
-    // Kreiranje SVG elementa
     var svg = d3.select("#chart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Tooltip element
     var tooltip = d3.select("#chart").insert("div", ":first-child")
         .attr("class", "tooltip");
 
-    // Dodavanje linija na grafikon
-    booksReadPerMonthByYear.forEach(function(yearData) {
-        svg.append("path")
-            .datum(yearData.data)
-            .attr("class", "line")
-            .attr("d", line)
-            .style("stroke", colors(yearData.year))
-            .style("fill", "none")
-            .style("stroke-width", "1.5px");
-
-        // Dodavanje točaka (krugova) na linijski graf
-        // Dodavanje točaka (krugova) na linijski graf
-            svg.selectAll(".dot" + yearData.year)
-                .data(yearData.data)
-                .enter().append("circle")
-                .attr("class", "dot")
-                .attr("cx", function(d) { return x(String(d.month)) + x.bandwidth() / 2; })
-                .attr("cy", function(d) { return y(d.booksRead); })
-                .attr("r", 5)
-                .style("fill", colors(yearData.year))
-                .style("cursor", "pointer")
-                .on("mouseover", function(event, d) {
-                    tooltip.html("Books read: " + d.booksRead)
-                        .style("visibility", "visible")
-                        .style("top", (event.pageY - 10) + "px")
-                        .style("left", (event.pageX + 10) + "px");
-                })
-                .on("mouseout", function() {
-                    tooltip.style("visibility", "hidden");
-                });
-
-    });
-
-    // Dodavanje X osi
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
@@ -495,12 +457,39 @@ var colors = d3.scaleOrdinal()
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)");
 
-    // Dodavanje Y osi
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
 
-    // Dodavanje legendi
+    booksReadPerMonthByYear.forEach(function(yearData) {
+        svg.append("path")
+            .datum(yearData.data)
+            .attr("class", "line")
+            .attr("d", line)
+            .style("stroke", colors(yearData.year))
+            .style("fill", "none")
+            .style("stroke-width", "1.5px");
+            
+        svg.selectAll(".dot" + yearData.year)
+                .data(yearData.data)
+                .enter().append("circle")
+                .attr("class", "dot")
+                .attr("cx", function(d) { return x(String(d.month)) + x.bandwidth() / 2; })
+                .attr("cy", function(d) { return y(d.booksRead); })
+                .attr("r", 5)
+                .style("fill", colors(yearData.year))
+                .on("mouseover", function(event, d) {
+                    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    tooltip.html( monthNames[d.month - 1] + " " + yearData.year + ": " + d.booksRead)
+                        .style("visibility", "visible")
+                        .style("top", (event.pageY - 10) + "px")
+                        .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.style("visibility", "hidden");
+                });
+    });
+
     var legend = svg.selectAll(".legend")
         .data(selectedYears)
         .enter().append("g")
@@ -522,7 +511,7 @@ var colors = d3.scaleOrdinal()
 
     svg.append("text")
         .attr("x", width / 2)
-        .attr("y", "-10px")
+        .attr("y", "-20px")
         .attr("text-anchor", "middle")  
         .attr("font-weight", "600")
         .attr("font-size", "1.4em")
@@ -547,17 +536,17 @@ function drawBooksPieChart(years) {
 
       var totalBooks = d3.sum(Object.values(booksCountByYear));
 
-      var width = 300,
-          height = 250,
-          padding = 100,
+      var width = 430,
+          height = 280,
+          padding = { top: 100, right: 80, bottom: 50, left: 20 },
           radius = Math.min(width, height) / 2;
 
       var svg = d3.select("#pie-chart")
           .append("svg")
-          .attr("width", width + 2*padding)
-          .attr("height", height + 2*padding)
+          .attr("width", width + padding.right + padding.left)
+          .attr("height", height + padding.top + padding.bottom)
           .append("g")
-          .attr("transform", "translate(" + (width / 2 + padding) + "," + (height / 2 + padding) + ")");
+          .attr("transform", "translate(" + (width / 2 + padding.left) + "," + (height / 2 + padding.top) + ")");
 
         var pie = d3.pie()
             .value(function(d) { return d.value; });
@@ -574,7 +563,7 @@ function drawBooksPieChart(years) {
             return { year: year, value: booksCountByYear[year] };
         });
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#9D4410', '#76491C', '#4E4D27', '#275233', '#00563F'];
+        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
 
         var colorScale = d3.scaleOrdinal()
             .domain(genreData.map(function(d) { return d.year; }))
@@ -598,14 +587,13 @@ function drawBooksPieChart(years) {
                     d.endAngle = i(t);
                     return arc(d);
                 }
-            })
+            });
 
         var tooltip = d3.select("#chart").insert("div", ":first-child")
         .attr("class", "tooltip");
 
         arcs.on("mouseover", function(event, d) { // Dodavanje event listenera za hover
-                var percent = ((d.data.value / totalBooks) * 100).toFixed(1);
-                tooltip.html(d.data.year + ": " + percent + "%")
+                tooltip.html(d.data.year)
                     .style("left", (event.pageX) + "px")
                     .style("top", (event.pageY - 28) + "px")
                     .style("visibility", "visible");
@@ -614,10 +602,12 @@ function drawBooksPieChart(years) {
                 tooltip.style("visibility", "hidden");
             });
 
+        
+
         svg.append("text")
             .attr("class", "pie-chart")
-            .attr("x", "0px")
-            .attr("y", "-185px")
+            .attr("x", "30px")
+            .attr("y", "-210px")
             .attr("text-anchor", "middle")
             .text("Books read per year:")
             .attr("font-weight", "600")
@@ -631,23 +621,31 @@ function drawBooksPieChart(years) {
             .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
         legend.append("rect")
-            .attr("x", width / 2 +10)
+            .attr("x", width / 2 - 15)
             .attr("y", -100)
             .attr("width", 18)
             .attr("height", 18)
             .style("fill", function(d) { return colorScale(d.year); });
 
         legend.append("text")
-            .attr("x", width / 2 + 35)
+            .attr("x", width / 2 + 10 )
             .attr("y", -91)
             .attr("dy", ".35em")
             .style("text-anchor", "start")
             .text(function(d) { return d.year; });
+
+        svg.selectAll(".arc").append("text")
+            .style("opacity", 0) 
+            .transition() 
+            .duration(2000) 
+            .style("opacity", 1)
+            .attr("transform", function(d) { return "translate(" + outerArc.centroid(d) + ")"; }) .attr("text-anchor", "middle")
+            .text(function(d) { return (((d.data.value / totalBooks) * 100).toFixed(1) + "%"); });
     });
 }
 
 
-  function drawStackedHorizontalBarChart(selectedYears) {
+function drawStackedHorizontalBarChart(selectedYears) {
     d3.select("#chart").selectAll("*").remove();
     d3.select("#pie-chart").selectAll("*").remove();
     d3.select("#donut-chart").selectAll("*").remove();
@@ -659,7 +657,6 @@ function drawBooksPieChart(years) {
 
     d3.csv("books.csv").then(function(data) {
         var genres = Array.from(new Set(data.map(d => d.Genre.trim()))); // Dohvaćanje svih žanrova, obrezivanje praznina
-        var genreColor = d3.scaleOrdinal(d3.schemeCategory10).domain(genres); // Boje za žanrove
 
         // Priprema podataka za stacked bar chart
         var preparedData = genres.map(genre => {
@@ -670,14 +667,17 @@ function drawBooksPieChart(years) {
             return genreData;
         });
 
+        // Filtriraj podatke kako bi uklonio prazne žanrove ili žanrove koji imaju sve nule
+        preparedData = preparedData.filter(d => d.genre && selectedYears.some(year => d[year] > 0));
+
         // Dimenzije grafikona
         var margin = { top: 40, right: 150, bottom: 40, left: 80 },
-            width = 1000 - margin.left - margin.right,
+            width = 1100 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
         // Y skala (Žanrovi)
         var y = d3.scaleBand()
-            .domain(genres)
+            .domain(preparedData.map(d => d.genre)) // Koristi filtrirane podatke
             .range([0, height])
             .padding(0.1);
 
@@ -702,17 +702,22 @@ function drawBooksPieChart(years) {
 
         var series = stack(preparedData);
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#9D4410', '#76491C', '#4E4D27', '#275233', '#00563F'];
+        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
+
+        // Ensure there are enough colors for all selected years
+        if (selectedYears.length > customColors.length) {
+            customColors = d3.schemeCategory10;
+        }
 
         var colorMap = {};
-        preparedData.forEach(function(d, i) {
-            colorMap[d.genre] = customColors[i % customColors.length];
+        selectedYears.forEach(function(year, i) {
+            colorMap[year] = customColors[i % customColors.length];
         });
 
         var colorScale = d3.scaleOrdinal()
-            .domain(genres)
-            .range(genres.map(function(d) { return colorMap[d]; }));
-        // Stvaranje stacked bars
+            .domain(selectedYears)
+            .range(selectedYears.map(function(year) { return colorMap[year]; }));
+
         var groups = svg.selectAll(".series")
             .data(series)
             .enter().append("g")
@@ -725,20 +730,19 @@ function drawBooksPieChart(years) {
             .attr("y", d => y(d.data.genre))
             .attr("x", d => x(d[0]))
             .attr("height", y.bandwidth())
+            .transition()
+            .duration(1000)
             .attr("width", d => x(d[1]) - x(d[0]));
 
-        // Dodavanje Y osi (Žanrovi)
         svg.append("g")
             .attr("class", "y axis")
             .call(d3.axisLeft(y));
 
-        // Dodavanje X osi (Broj knjiga)
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x));
 
-        // Dodavanje legende
         var legend = svg.selectAll(".legend")
             .data(selectedYears)
             .enter().append("g")
@@ -799,7 +803,6 @@ function drawBooksPieChart(years) {
 
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         bookMonthP.textContent = "Books read in " + monthNames[month - 1] + " " + year;
-        console.log(bookMonthP);
 
         var bookListDiv = document.createElement("div");
         bookListDiv.setAttribute("id", "books-list-div");
@@ -816,7 +819,7 @@ function drawBooksPieChart(years) {
         booksList.innerHTML = ""; 
         filteredData.forEach(function(book) {
             var listItem = document.createElement("li");
-            listItem.textContent = book.Title;
+            listItem.textContent = book.Title + ", " + book.Author;;
             
             listItem.addEventListener("click", function() {
                 showBookRating(book);
@@ -824,6 +827,47 @@ function drawBooksPieChart(years) {
             booksList.appendChild(listItem);
         });
       });
+    }
+
+    function showBooksByGenre(genre, year) {
+        
+        d3.csv("books.csv").then(function(data) {
+            d3.select("#books-div").selectAll("*").remove(); 
+            if (!year) {
+                return;
+            }
+            var filteredData = data.filter(d => d.Genre.trim() == genre && d.Year == year);
+
+            var booksDiv = document.getElementById("books-div");
+
+            var bookYearP = document.createElement("p");
+            bookYearP.setAttribute("id", "books-year");
+            booksDiv.appendChild(bookYearP);
+
+            bookYearP.innerText = genre + " in " + year;
+
+            var bookListDiv = document.createElement("div");
+            bookListDiv.setAttribute("id", "books-list-div");
+            booksDiv.appendChild(bookListDiv);
+
+            var booksList = document.createElement("ul");
+            booksList.setAttribute("id", "books-list");
+            bookListDiv.appendChild(booksList);
+
+            var bookRating = document.createElement("ul");
+            bookRating.setAttribute("id", "books-rating");
+            bookListDiv.appendChild(bookRating);
+
+            filteredData.forEach(function(book) {
+                var listItem = document.createElement("li");
+                listItem.innerText = book.Title + ", " + book.Author;
+
+                listItem.addEventListener("click", function() {
+                    showBookRating(book);
+                });
+                booksList.appendChild(listItem);
+            });
+        });
     }
 
     function showBooksByYear(year) {
@@ -860,7 +904,7 @@ function drawBooksPieChart(years) {
 
         filteredData.forEach(function(book) {
             var listItem = document.createElement("li");
-            listItem.innerText = book.Title;
+            listItem.innerText = book.Title + ", " + book.Author;
 
             listItem.addEventListener("click", function() {
                 showBookRating(book);
@@ -872,17 +916,13 @@ function drawBooksPieChart(years) {
 
     function showBookRating(book) {
         var ratingDiv = document.getElementById("books-rating");
-        ratingDiv.innerHTML = ""; // Čišćenje prethodnog sadržaja
+        ratingDiv.innerHTML = ""; 
 
-        var ratingTitle = document.createElement("p");
-        ratingTitle.setAttribute("id", "title");
-        ratingTitle.textContent = book.Title;
-        ratingDiv.appendChild(ratingTitle);
-
-        var ratingAuthor = document.createElement("p");
-        ratingAuthor.setAttribute("id", "author");
-        ratingAuthor.textContent = book.Author;
-        ratingDiv.appendChild(ratingAuthor);
+        var CoverImage = document.createElement("img");
+        CoverImage.setAttribute("id", "cover");
+        CoverImage.src = book.Link;
+        CoverImage.alt = "Cover image";
+        ratingDiv.appendChild(CoverImage);
 
         var ratingImage = document.createElement("img");
         ratingImage.src = "images/stars" + book.MyRating + ".png";
@@ -941,13 +981,16 @@ function drawBooksPieChart(years) {
                     i = i + 75;
                 }
                 else if(totalPageCount > 10000 && totalPageCount <= 20000){
-                    i = i + 150;
+                    i = i + 143;
+                }
+                else if(totalPageCount > 20000 && totalPageCount <= 35000){
+                    i = i + 253;
+                }
+                else if(totalPageCount > 40000){
+                    i = i + 553;
                 }
                 else if(totalPageCount < 2500){
-                    i = i + 20;
-                }
-                else{
-                    i = i + 200;
+                    i = i + 6;
                 }
                 if (i > totalPageCount) {
                     totalPagesSpan.textContent = totalPageCount;
@@ -959,7 +1002,6 @@ function drawBooksPieChart(years) {
 
     var selectedYears = [];
 
-    // Pokretanje funkcije za crtanje grafikona kada se klikne na godinu
     document.addEventListener("DOMContentLoaded", function() {
       var container = document.createElement("div");
       container.setAttribute("id", "container");
@@ -977,7 +1019,7 @@ function drawBooksPieChart(years) {
       charts1.setAttribute("id", "charts1");
       charts.appendChild(charts1);
 
-      var chartDiv = document.createElement("div"); //barchart
+      var chartDiv = document.createElement("div"); 
       chartDiv.setAttribute("id", "chart");
       charts1.appendChild(chartDiv);
 
@@ -1058,8 +1100,8 @@ function drawBooksPieChart(years) {
             }
         });
         box.appendChild(link);
-      });      
-    });
+    });      
+});
   </script>
 </body>
 </html>
