@@ -1,4 +1,4 @@
-#Vizualizacija čitanja knjiga
+# Vizualizacija čitanja knjiga
 
 ## Opis projektnog zadatka
 Cilj ovog projekta je kreirati interaktivnu web aplikaciju koja omogućuje vizualizaciju podataka o pročitanim knjigama putem različitih grafičkih prikaza. Aplikacija omogućava korisnicima pregled broja pročitanih knjiga po godinama, žanrovima i mjesecima te pruža alate za interakciju i detaljniju analizu podataka.
