@@ -34,9 +34,9 @@ o	Stars5.png
 
 1.	Nakon pokretanja Live Servera pokrenit će se projekt u pregledniku
 2.	Prikaz podataka:
-•	Moguće je odabrati jednu ili više godina za koje želimo dobiti podatke
-•	Klikom na jednu godinu prikazuju se različiti podaci o navikama čitanja te godine
-•	Klikom na više godina uspoređuju se podaci između tih godina
+- Moguće je odabrati jednu ili više godina za koje želimo dobiti podatke
+- Klikom na jednu godinu prikazuju se različiti podaci o navikama čitanja te godine
+- Klikom na više godina uspoređuju se podaci između tih godina
 3.	Interakcija s grafikonima za jednu godinu:
 •	Omogućen je klik na stupce u stupčastom grafu nakon čega se prikazuje lista knjiga pročitanih u kliknutom mjesecu
 •	Omogućen je klik na žanrove gdje se prikazuje lista knjiga pročitanih u kliknutom žanru 
