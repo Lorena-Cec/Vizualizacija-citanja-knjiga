@@ -12,7 +12,6 @@
     <h1>My books</h1>
     <p>All the books read from 2014 to 2024</p>
   </div>
-  
   <script>
     /*Priručnik lv*/
     function drawChart(year) {
@@ -83,25 +82,31 @@
             .enter()
             .append("rect")
             .attr("x", function(d) { return x(String(d.month)); })
-            .attr("y", height)  
-            .attr("height", 0)  
+            .attr("y", height)
+            .attr("height", 0)
             .attr("width", x.bandwidth())
             .attr("class", function(d) { return "bar bar-" + String(d.month); })
             .style("cursor", "pointer")
             .on("click", function(event, d) {
+                var rect = d3.select(this);
+                var alreadyClicked = rect.classed("clicked");
+                
                 svg.selectAll("rect").classed("clicked", false);
-                d3.select(this).classed("clicked", true);
-                var clickedMonth = d3.select(this).attr("class").split(" ")[1].split("-")[1]; 
-                showBooksByMonth(clickedMonth, year);
+                
+                if (!alreadyClicked) {
+                    rect.classed("clicked", true);
+                    var clickedMonth = rect.attr("class").split(" ")[1].split("-")[1];
+                    showBooksByMonth(clickedMonth, year);
+                } else {
+                    rect.classed("clicked", false);
+                    showBooksByYear(year);
+                }
             })
             .transition()
             .duration(800)
             .delay(function(d, i) { return i * 100; })
             .attr("y", function(d) { return y(d.booksRead); })
             .attr("height", function(d) { return height - y(d.booksRead); });
-            
-
-        var totalBooks = d3.sum(booksReadPerMonth, function(d) { return d.booksRead; });
 
         svg.append("text")
             .attr("class", "total-books")
@@ -156,7 +161,7 @@
             return b.count - a.count;
         });
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
+        var customColors = ['#fac55a', '#ffaa00', '#da9c1e', '#df832f', '#c15f06', '#78410f', '#8fbc8f', '#09bd8d', '#26a180', '#047c5c', '#00563F'];
 
         var colorMap = {};
         genreData.forEach(function(d, i) {
@@ -232,11 +237,22 @@
                     addedPolylineAndText = true;
                 }
             });
-        
+
         arcs.on("click", function(event, d) {
-            var clickedGenre = d.data.genre;
-            showBooksByGenre(clickedGenre, year);
-        });
+            var arc = d3.select(this);
+            var alreadyClicked = arc.classed("clicked");
+
+            svg.selectAll(".arc").classed("clicked", false);
+            
+            if (!alreadyClicked) {
+                arc.classed("clicked", true);                                                                               
+                var clickedGenre = d.data.genre;
+                showBooksByGenre(clickedGenre, year);
+            } else {                                    
+                arc.classed("clicked", false);
+                showBooksByYear(year);                                                          
+            }
+        });                                                                                                  
 
         function midAngle(d) {
             return d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -371,21 +387,17 @@
     function drawComparisonChart(selectedYears) {
 
         d3.select("#chart").selectAll("*").remove();
-        d3.select("#pie-chart").selectAll("*").remove();
-        d3.select("#donut-chart").selectAll("*").remove();
-        d3.select("#books-div").selectAll("*").remove();
-        d3.select("#books-div1").selectAll("*").remove();
-        d3.select("#total-pages").selectAll("*").remove();
         if (selectedYears.length === 0) return;
 
         d3.csv("books.csv").then(function(data) {
             var months = d3.range(1, 13);
-            var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
+            var customColors = ['#fac55a', '#ffaa00', '#da9c1e', '#df832f', '#c15f06', '#78410f', '#8fbc8f', '#09bd8d', '#26a180', '#047c5c', '#00563F'];
 
             var colors = d3.scaleOrdinal()
                 .domain(selectedYears)
                 .range(customColors);
-                var booksReadPerMonthByYear = [];
+
+            var booksReadPerMonthByYear = [];
 
             selectedYears.forEach(function(year) {
                 var filteredData = data.filter(function(d) {
@@ -517,253 +529,252 @@
                 .attr("font-weight", "600")
                 .attr("font-size", "1.4em")
                 .text("Books Read per Month by Year");
+        });
+    }
 
+    function drawBooksPieChart(years) {
+        d3.csv("books.csv").then(function(data) {
+        d3.select("#pie-chart").selectAll("*").remove();
+        if (!years.length) return; 
+
+        var booksCountByYear = {};
+
+        years.forEach(function(year) {
+            var filteredData = data.filter(function(d) {
+                return d.Year == year;
             });
-        }
-
-function drawBooksPieChart(years) {
-    d3.csv("books.csv").then(function(data) {
-      d3.select("#pie-chart").selectAll("*").remove();
-      if (!years.length) return; 
-
-      var booksCountByYear = {};
-
-      years.forEach(function(year) {
-          var filteredData = data.filter(function(d) {
-              return d.Year == year;
-          });
-          booksCountByYear[year] = filteredData.length;
-      });
-
-      var totalBooks = d3.sum(Object.values(booksCountByYear));
-
-      var width = 430,
-          height = 280,
-          padding = { top: 100, right: 80, bottom: 50, left: 20 },
-          radius = Math.min(width, height) / 2;
-
-      var svg = d3.select("#pie-chart")
-          .append("svg")
-          .attr("width", width + padding.right + padding.left)
-          .attr("height", height + padding.top + padding.bottom)
-          .append("g")
-          .attr("transform", "translate(" + (width / 2 + padding.left) + "," + (height / 2 + padding.top) + ")");
-
-        var pie = d3.pie()
-            .value(function(d) { return d.value; });
-
-        var arc = d3.arc()
-            .innerRadius(0)
-            .outerRadius(Math.min(width, height) / 2 - 1);
-
-        var outerArc = d3.arc()
-            .innerRadius(radius + 50)
-            .outerRadius(radius);
-
-        var genreData = Object.keys(booksCountByYear).map(function(year) {
-            return { year: year, value: booksCountByYear[year] };
+            booksCountByYear[year] = filteredData.length;
         });
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
+        var totalBooks = d3.sum(Object.values(booksCountByYear));
 
-        var colorScale = d3.scaleOrdinal()
-            .domain(genreData.map(function(d) { return d.year; }))
-            .range(customColors);
+        var width = 430,
+            height = 280,
+            padding = { top: 100, right: 80, bottom: 50, left: 20 },
+            radius = Math.min(width, height) / 2;
 
-        var arcs = svg.selectAll(".arc")
-            .data(pie(genreData))
-            .enter().append("g")
-            .attr("class", "arc");
-
-            var addedPolylineAndText = false;
-
-        arcs.append("path")
-            .attr("d", arc)
-            .attr("fill", function(d) { return colorScale(d.data.year); })
-            .transition() // Dodajemo tranziciju
-            .duration(2000) // Trajanje tranzicije u milisekundama
-            .attrTween('d', function(d) {
-                var i = d3.interpolate(d.startAngle, d.endAngle);
-                return function(t) {
-                    d.endAngle = i(t);
-                    return arc(d);
-                }
-            });
-
-        /*https://d3-graph-gallery.com/graph/interactivity_tooltip.html*/
-        var tooltip = d3.select("#chart").insert("div", ":first-child")
-        .attr("class", "tooltip");
-
-        arcs.on("mouseover", function(event, d) { // Dodavanje event listenera za hover
-                tooltip.html(d.data.year)
-                    .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 28) + "px")
-                    .style("visibility", "visible");
-            })
-            .on("mouseout", function(d) {
-                tooltip.style("visibility", "hidden");
-            });
-
-        
-
-        svg.append("text")
-            .attr("class", "pie-chart")
-            .attr("x", "30px")
-            .attr("y", "-210px")
-            .attr("text-anchor", "middle")
-            .text("Books read per year:")
-            .attr("font-weight", "600")
-            .attr("font-size", "1.4em");
-
-        var legend = svg.selectAll(".legend")
-            .data(genreData)
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-        legend.append("rect")
-            .attr("x", width / 2 - 15)
-            .attr("y", -100)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", function(d) { return colorScale(d.year); });
-
-        legend.append("text")
-            .attr("x", width / 2 + 10 )
-            .attr("y", -91)
-            .attr("dy", ".35em")
-            .style("text-anchor", "start")
-            .text(function(d) { return d.year; });
-
-        svg.selectAll(".arc").append("text")
-            .style("opacity", 0) 
-            .transition() 
-            .duration(2000) 
-            .style("opacity", 1)
-            .attr("transform", function(d) { return "translate(" + outerArc.centroid(d) + ")"; }) .attr("text-anchor", "middle")
-            .text(function(d) { return (((d.data.value / totalBooks) * 100).toFixed(1) + "%"); });
-    });
-}
-
-/*https://observablehq.com/@d3/stacked-horizontal-bar-chart/2*/
-function drawStackedHorizontalBarChart(selectedYears) {
-    d3.select("#chart").selectAll("*").remove();
-    d3.select("#pie-chart").selectAll("*").remove();
-    d3.select("#donut-chart").selectAll("*").remove();
-    d3.select("#books-div").selectAll("*").remove();
-    d3.select("#books-div1").selectAll("*").remove();
-    d3.select("#total-pages").selectAll("*").remove();
-
-    if (selectedYears.length === 0) return;
-
-    d3.csv("books.csv").then(function(data) {
-        var genres = Array.from(new Set(data.map(d => d.Genre.trim()))); 
-
-        var preparedData = genres.map(genre => {
-            var genreData = { genre: genre };
-            selectedYears.forEach(year => {
-                genreData[year] = data.filter(d => d.Year == year && d.Genre.trim() == genre).length;
-            });
-            return genreData;
-        });
-
-        preparedData = preparedData.filter(d => d.genre && selectedYears.some(year => d[year] > 0));
-
-        var margin = { top: 40, right: 150, bottom: 40, left: 80 },
-            width = 1100 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
-
-        var y = d3.scaleBand()
-            .domain(preparedData.map(d => d.genre)) 
-            .range([0, height])
-            .padding(0.1);
-
-        var x = d3.scaleLinear()
-            .domain([0, d3.max(preparedData, d => d3.sum(selectedYears.map(year => d[year])))])
-            .nice()
-            .range([0, width]);
-
-        var svg = d3.select("#books-div1").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+        var svg = d3.select("#pie-chart")
+            .append("svg")
+            .attr("width", width + padding.right + padding.left)
+            .attr("height", height + padding.top + padding.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + (width / 2 + padding.left) + "," + (height / 2 + padding.top) + ")");
 
-        var stack = d3.stack()
-            .keys(selectedYears)
-            .order(d3.stackOrderNone)
-            .offset(d3.stackOffsetNone);
+            var pie = d3.pie()
+                .value(function(d) { return d.value; });
 
-        var series = stack(preparedData);
+            var arc = d3.arc()
+                .innerRadius(0)
+                .outerRadius(Math.min(width, height) / 2 - 1);
 
-        var customColors = ['#FAC55A', '#DF832F', '#D2611A', '#C44004', '#A8430C', '#8C4615', '#70491D', '#544D26', '#38502E', '#1C5337', '#00563F'];
+            var outerArc = d3.arc()
+                .innerRadius(radius + 50)
+                .outerRadius(radius);
 
-        if (selectedYears.length > customColors.length) {
-            customColors = d3.schemeCategory10;
-        }
+            var genreData = Object.keys(booksCountByYear).map(function(year) {
+                return { year: year, value: booksCountByYear[year] };
+            });
 
-        var colorMap = {};
-        selectedYears.forEach(function(year, i) {
-            colorMap[year] = customColors[i % customColors.length];
+            var customColors = ['#fac55a', '#ffaa00', '#da9c1e', '#df832f', '#c15f06', '#78410f', '#8fbc8f', '#09bd8d', '#26a180', '#047c5c', '#00563F'];
+
+            var colorScale = d3.scaleOrdinal()
+                .domain(genreData.map(function(d) { return d.year; }))
+                .range(customColors);
+
+            var arcs = svg.selectAll(".arc")
+                .data(pie(genreData))
+                .enter().append("g")
+                .attr("class", "arc");
+
+                var addedPolylineAndText = false;
+
+            arcs.append("path")
+                .attr("d", arc)
+                .attr("fill", function(d) { return colorScale(d.data.year); })
+                .transition() 
+                .duration(2000) 
+                .attrTween('d', function(d) {
+                    var i = d3.interpolate(d.startAngle, d.endAngle);
+                    return function(t) {
+                        d.endAngle = i(t);
+                        return arc(d);
+                    }
+                });
+
+            /*https://d3-graph-gallery.com/graph/interactivity_tooltip.html*/
+            var tooltip = d3.select("#chart").insert("div", ":first-child")
+            .attr("class", "tooltip");
+
+            arcs.on("mouseover", function(event, d) { 
+                    tooltip.html(d.data.year)
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px")
+                        .style("visibility", "visible");
+                })
+                .on("mouseout", function(d) {
+                    tooltip.style("visibility", "hidden");
+                });
+
+            
+
+            svg.append("text")
+                .attr("class", "pie-chart")
+                .attr("x", "30px")
+                .attr("y", "-210px")
+                .attr("text-anchor", "middle")
+                .text("Books read per year:")
+                .attr("font-weight", "600")
+                .attr("font-size", "1.4em");
+
+            var legend = svg.selectAll(".legend")
+                .data(genreData)
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                .attr("x", width / 2 - 15)
+                .attr("y", -100)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", function(d) { return colorScale(d.year); });
+
+            legend.append("text")
+                .attr("x", width / 2 + 10 )
+                .attr("y", -91)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text(function(d) { return d.year; });
+
+            svg.selectAll(".arc").append("text")
+                .style("opacity", 0) 
+                .transition() 
+                .duration(2000) 
+                .style("opacity", 1)
+                .attr("transform", function(d) { return "translate(" + outerArc.centroid(d) + ")"; }) .attr("text-anchor", "middle")
+                .text(function(d) { return (((d.data.value / totalBooks) * 100).toFixed(1) + "%"); });
         });
+    }
 
-        var colorScale = d3.scaleOrdinal()
-            .domain(selectedYears)
-            .range(selectedYears.map(function(year) { return colorMap[year]; }));
+    /*https://observablehq.com/@d3/stacked-horizontal-bar-chart/2*/
+    function drawStackedHorizontalBarChart(selectedYears) {
+        d3.select("#chart").selectAll("*").remove();
+        d3.select("#pie-chart").selectAll("*").remove();
+        d3.select("#donut-chart").selectAll("*").remove();
+        d3.select("#books-div").selectAll("*").remove();
+        d3.select("#genre-chart-horizontal").selectAll("*").remove();
+        d3.select("#total-pages").selectAll("*").remove();
 
-        var groups = svg.selectAll(".series")
-            .data(series)
-            .enter().append("g")
-            .attr("class", "series")
-            .style("fill", (d, i) => colorScale(d.key));
+        if (selectedYears.length === 0) return;
 
-        groups.selectAll("rect")
-            .data(d => d)
-            .enter().append("rect")
-            .attr("y", d => y(d.data.genre))
-            .attr("x", d => x(d[0]))
-            .attr("height", y.bandwidth())
-            .transition()
-            .duration(1000)
-            .attr("width", d => x(d[1]) - x(d[0]));
+        d3.csv("books.csv").then(function(data) {
+            var genres = Array.from(new Set(data.map(d => d.Genre.trim()))); 
 
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(d3.axisLeft(y));
+            var preparedData = genres.map(genre => {
+                var genreData = { genre: genre };
+                selectedYears.forEach(year => {
+                    genreData[year] = data.filter(d => d.Year == year && d.Genre.trim() == genre).length;
+                });
+                return genreData;
+            });
 
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            preparedData = preparedData.filter(d => d.genre && selectedYears.some(year => d[year] > 0));
 
-        var legend = svg.selectAll(".legend")
-            .data(selectedYears)
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+            var margin = { top: 40, right: 150, bottom: 40, left: 80 },
+                width = 1100 - margin.left - margin.right,
+                height = 350 - margin.top - margin.bottom;
 
-        legend.append("rect")
-            .attr("x", width + 20)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", (d, i) => colorScale(d));
+            var y = d3.scaleBand()
+                .domain(preparedData.map(d => d.genre)) 
+                .range([0, height])
+                .padding(0.1);
 
-        legend.append("text")
-            .attr("x", width + 44)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "start")
-            .text(d => d);
+            var x = d3.scaleLinear()
+                .domain([0, d3.max(preparedData, d => d3.sum(selectedYears.map(year => d[year])))])
+                .nice()
+                .range([0, width]);
 
-        svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", "-10px")
-            .attr("text-anchor", "middle")  
-            .attr("font-weight", "600")
-            .attr("font-size", "1.4em")
-            .text("Genres Read by Year");
-    });
-}
+            var svg = d3.select("#genre-chart-horizontal").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var stack = d3.stack()
+                .keys(selectedYears)
+                .order(d3.stackOrderNone)
+                .offset(d3.stackOffsetNone);
+
+            var series = stack(preparedData);
+
+            var customColors = ['#fac55a', '#ffaa00', '#da9c1e', '#df832f', '#c15f06', '#78410f', '#8fbc8f', '#09bd8d', '#26a180', '#047c5c', '#00563F'];
+
+            if (selectedYears.length > customColors.length) {
+                customColors = d3.schemeCategory10;
+            }
+
+            var colorMap = {};
+            selectedYears.forEach(function(year, i) {
+                colorMap[year] = customColors[i % customColors.length];
+            });
+
+            var colorScale = d3.scaleOrdinal()
+                .domain(selectedYears)
+                .range(selectedYears.map(function(year) { return colorMap[year]; }));
+
+            var groups = svg.selectAll(".series")
+                .data(series)
+                .enter().append("g")
+                .attr("class", "series")
+                .style("fill", (d, i) => colorScale(d.key));
+
+            groups.selectAll("rect")
+                .data(d => d)
+                .enter().append("rect")
+                .attr("y", d => y(d.data.genre))
+                .attr("x", d => x(d[0]))
+                .attr("height", y.bandwidth())
+                .transition()
+                .duration(1000)
+                .attr("width", d => x(d[1]) - x(d[0]));
+
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(d3.axisLeft(y));
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            var legend = svg.selectAll(".legend")
+                .data(selectedYears)
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+
+            legend.append("rect")
+                .attr("x", width + 20)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", (d, i) => colorScale(d));
+
+            legend.append("text")
+                .attr("x", width + 44)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text(d => d);
+
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", "-10px")
+                .attr("text-anchor", "middle")  
+                .attr("font-weight", "600")
+                .attr("font-size", "1.4em")
+                .text("Genres Read by Year");
+        });
+    }
 
 
     function showBooksByMonth(month, year) {
@@ -1000,51 +1011,51 @@ function drawStackedHorizontalBarChart(selectedYears) {
       container.setAttribute("id", "container");
       document.body.appendChild(container);
 
-      var box = document.createElement("div");
+      var box = document.createElement("div"); //godine
       box.setAttribute("id", "box");
       container.appendChild(box);
 
-      var charts = document.createElement("div");
+      var charts = document.createElement("div"); //svi grafovi kontejner
       charts.setAttribute("id", "charts");
       container.appendChild(charts);
 
-      var charts1 = document.createElement("div");
+      var charts1 = document.createElement("div"); //gornji dio grafova
       charts1.setAttribute("id", "charts1");
       charts.appendChild(charts1);
 
-      var chartDiv = document.createElement("div"); 
+      var chartDiv = document.createElement("div"); //stupcasti graf 
       chartDiv.setAttribute("id", "chart");
       charts1.appendChild(chartDiv);
 
-      var pieChartDiv = document.createElement("div"); //piechart
+      var pieChartDiv = document.createElement("div"); //pie chart
       pieChartDiv.setAttribute("id", "pie-chart");
       charts1.appendChild(pieChartDiv);
 
-      var charts2 = document.createElement("div");
+      var charts2 = document.createElement("div"); //donji dio grafova
       charts2.setAttribute("id", "charts2");
       charts.appendChild(charts2);
 
-      var booksDiv1 = document.createElement("div");
-      booksDiv1.setAttribute("id", "books-div1");
+      var booksDiv1 = document.createElement("div"); //žanr horizontal chart
+      booksDiv1.setAttribute("id", "genre-chart-horizontal");
       charts2.appendChild(booksDiv1);
 
-      var booksDiv = document.createElement("div");
+      var booksDiv = document.createElement("div"); //lista knjiga
       booksDiv.setAttribute("id", "books-div");
       charts2.appendChild(booksDiv);
 
-      var donutChartDiv = document.createElement("div");
+      var donutChartDiv = document.createElement("div"); //donut chart
       donutChartDiv.setAttribute("id", "donut-chart");
       charts2.appendChild(donutChartDiv);
 
-      var totalPagesDivParent = document.createElement("div");
+      var totalPagesDivParent = document.createElement("div"); //ukupan broj stranica glavni element
       totalPagesDivParent.setAttribute("id", "total-pages-parent");
       charts2.appendChild(totalPagesDivParent);
 
-      var totalPagesDiv = document.createElement("div");
+      var totalPagesDiv = document.createElement("div"); //ukupan broj stranica svg
       totalPagesDiv.setAttribute("id", "total-pages");
       totalPagesDivParent.appendChild(totalPagesDiv);
 
-      document.getElementById("books-div1").classList.add("hidden");
+      document.getElementById("genre-chart-horizontal").classList.add("hidden");
       document.getElementById("books-div").classList.add("hidden");
       document.getElementById("total-pages-parent").classList.add("hidden");
 
@@ -1072,7 +1083,7 @@ function drawStackedHorizontalBarChart(selectedYears) {
                 drawDonutChart(selectedYears[0]);
                 showTotalPagesReadByYear(selectedYears[0]);
                 showBooksByYear(selectedYears[0]);
-                document.getElementById("books-div1").classList.add("hidden");
+                document.getElementById("genre-chart-horizontal").classList.add("hidden");
                 document.getElementById("books-div").classList.remove("hidden");
                 document.getElementById("total-pages-parent").classList.remove("hidden");
             } else {
@@ -1081,14 +1092,13 @@ function drawStackedHorizontalBarChart(selectedYears) {
                 drawStackedHorizontalBarChart(selectedYears);
                 drawBooksPieChart(selectedYears);
             }
-
             if (selectedYears.length === 0) {
-                document.getElementById("books-div1").classList.add("hidden");
+                document.getElementById("genre-chart-horizontal").classList.add("hidden");
                 document.getElementById("books-div").classList.add("hidden");
                 document.getElementById("total-pages-parent").classList.add("hidden");
             } else if(selectedYears.length > 1) {
                 document.getElementById("books-div").classList.add("hidden");
-                document.getElementById("books-div1").classList.remove("hidden");
+                document.getElementById("genre-chart-horizontal").classList.remove("hidden");
                 document.getElementById("total-pages-parent").classList.remove("hidden");
             }
         });
